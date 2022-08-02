@@ -33,8 +33,7 @@ class CoreView implements TranslatorAwareInterface
   private $conditional = [];
   private $productTitle;
   private $meta;
-  private $viewDir;
-  private $autoIncludeDir;
+  private $viewRoot;  // full path to the root of the view directory
   private $mainTemplate;
 
   /* regex */
@@ -94,8 +93,8 @@ class CoreView implements TranslatorAwareInterface
     $this->core = $core;
     $this->app = $app;
     $this->meta = new \stdClass();
-    $this->viewDir = $this->getViewDirectory();
-    $this->autoIncludeDir = $this->viewDir;
+    /* this must be updated by caller using setRootViewDir(..) */
+    $this->viewRoot = '';
     $this->mainTemplate = 'main.html';
     $this->productTitle = '';
   }
@@ -145,50 +144,55 @@ class CoreView implements TranslatorAwareInterface
     return $this->translator instanceof Translator;
   }
 
-  /***************************************/
-  /* View directories and template files */
-  /***************************************/
+  /**** View directories and template files ****/
+
+  /**
+  * Sets the full file system path to the root view directory
+  *
+  * An application name is appended to the root view directory
+  * to obtain the full path for a particular app.
+  *
+  * @param string $value
+  * @return \Restless\Core\CoreView
+  */
+  public function setRootViewDir(string $value) : self
+  {
+    $this->viewRoot = $value;
+    return $this;
+  }
+
+  /**
+  * Sets the asset root
+  *
+  * @param string $value
+  * @return \Restless\Core\CoreView
+  */
+  public function setAssetRoot(string $value) : self
+  {
+    return $this;
+  }
 
   /**
   * Sets the main template file name. Only needed if you want to override the default.
   *
-  * @param mixed $value
+  * @param string $value
+  * @return \Restless\Core\CoreView
   */
-  public function setTemplateFile(string $value)
+  public function setTemplateFile(string $value) : self
   {
     $this->mainTemplate = $value;
+    return $this;
   }
 
   /**
-  * Sets the view directory. Only needed if you want to override the default.
-  *
-  * @param string $value
-  */
-  public function setViewDirectory(string $value)
-  {
-    $this->viewDir = $value;
-  }
-
-  /**
-  * Sets the auto include directory. Only needed if you want to override the default,
-  * which is same as view directory.
-  *
-  * @param string $value
-  */
-  public function setAutoIncludeDir($value)
-  {
-    $this->autoIncludeDir = $value;
-  }
-
-  /**
-  * Gets the view directory for the specified app or (if null) the current app.
+  * Gets the full path to view directory for the specified app or (if null) the current app.
   *
   * @param string|null $app
   * @return string
   */
   public function getViewDirectory(?string $app = null): string
   {
-    return sprintf('%s/%s/view', APP_ROOT, $app ?? $this->app);
+    return sprintf('%s/%s', $this->viewRoot, $app ?? $this->app);
   }
 
   /**
@@ -200,12 +204,11 @@ class CoreView implements TranslatorAwareInterface
   */
   public function getCommonFileName(string $fileName): string
   {
-    $common = $this->getViewDirectory(AppCollection::COMMON_KEY);
-    return sprintf('%s/%s', $common, $fileName);
+    return sprintf('%s/%s', $this->getViewDirectory(AppCollection::COMMON_KEY), $fileName);
   }
 
   /**
-  * Gets the full path to a file in the specified application
+  * Gets the full path to a view file of the specified application
   *
   * @param string $app name of app
   * @param string $fileName base file name, no path
@@ -214,12 +217,11 @@ class CoreView implements TranslatorAwareInterface
   */
   public function getApplicationFileName(string $app, string $fileName) : string
   {
-    $appdir = $this->getViewDirectory($app);
-    return sprintf('%s/%s', $appdir, $fileName);
+    return sprintf('%s/%s', $this->getViewDirectory($app), $fileName);
   }
 
   /**
-  * Gets the full path to a file in the current application
+  * Gets the full path to a view file of the current application
   *
   * @param string $fileName base file name, no path
   * @return string
@@ -245,10 +247,6 @@ class CoreView implements TranslatorAwareInterface
     }
     return basename($path);
   }
-
-  /***************************************/
-  /* Value setters                       */
-  /***************************************/
 
   /**
   * Sets the product title that can then be used in the setMetaTitle()
@@ -403,7 +401,7 @@ class CoreView implements TranslatorAwareInterface
   private function getFileName($baseName) : string
   {
     $fc = substr($_SERVER['DOCUMENT_ROOT'], 0, 1);
-    return (strpos($baseName, $fc) === 0) ? $baseName : "{$this->viewDir}/$baseName";
+    return (strpos($baseName, $fc) === 0) ? $baseName : $this->getCurrentApplicationFileName($baseName);
   }
 
   private function getFileContents($fileName)
@@ -480,7 +478,7 @@ class CoreView implements TranslatorAwareInterface
       {
         $file = $out[1][$k];
         $fileStr = null;
-        $filePath = "{$this->autoIncludeDir}/$file";
+        $filePath = "{$this->getFullAutoIncludeDirectory()}/$file";
         $fileStr = $this->getFileContents($filePath);
 
         if ($fileStr === false)
@@ -529,7 +527,7 @@ class CoreView implements TranslatorAwareInterface
     $adj = 0;
     foreach ($parms as $parm)
     {
-      $s = substr_replace($s, null, $parm[0] - $adj, $parm[1]);
+      $s = substr_replace($s, '', $parm[0] - $adj, $parm[1]);
       $adj += $parm[1];
     }
   }

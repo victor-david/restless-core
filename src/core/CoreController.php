@@ -19,7 +19,8 @@ use Exception;
 */
 abstract class CoreController implements AppCollectionInterface
 {
-  const DEFAULT_CHARSET = 'utf-8';
+  public const DEFAULT_CHARSET = 'utf-8';
+  public const DEFAULT_ASSET_PATH = 'asset';
 
   protected $request;
   public $view;
@@ -30,15 +31,18 @@ abstract class CoreController implements AppCollectionInterface
   public $server;
   public $system;
   public $config;
+  private $assetPath;
 
   /**
   * Class constructor
   *
   * @param CoreRequest $request
+  * @param string $assetPath;
   */
-  public function __construct(CoreRequest $request)
+  public function __construct(CoreRequest $request, string $assetPath = self::DEFAULT_ASSET_PATH)
   {
     $this->request = $request;
+    $this->assetPath = $assetPath;
     $this->apps = $this->getAppCollection();
     $this->view = new CoreView($this, $this->request->app);
     $this->get = $this->getArguments($_GET);
@@ -326,8 +330,8 @@ abstract class CoreController implements AppCollectionInterface
       'siteurl' => $this->getLocation('/'),
       'controller' => $this->request->controller,
       'method' => $this->request->action,
-      'asset' => ASSET,
       'encoding' => self::DEFAULT_CHARSET,
+      'asset' => $this->assetPath,
       'year' => date('Y', time()),
       'ip' => $this->server->remote_addr
     ]);

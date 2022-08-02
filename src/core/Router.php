@@ -9,18 +9,19 @@ namespace Restless\Core;
 final class Router
 {
   /**
-  * The default application that is always present in the apps array.
+  * Default application namespace
   */
-  public const DEFAULT_APP = 'root';
+  public const DEFAULT_APP_NAMESPACE = 'App';
 
   /**
-  * Top level namespace for controllers.
-  *
-  * @var mixed
+  * Default controller namespace
   */
-  private $topLevel;
+  public const DEFAULT_CONTROLLER_NAMESPACE = 'Controller';
 
-  private $app;
+  private $topLevel;            // top level namespace
+  private $app;                 // app name
+  private $appNamespace;        // application namespace
+  private $controllerNamespace; // controller namespace
 
   /**
   * Gets the request object
@@ -32,15 +33,24 @@ final class Router
   /**
   * Class constructor
   *
-  * @param string $topLevel Top level namespace
-  * @param string $app The
+  * Controllers are located according to the specifications passed here
   *
-  * @return void
+  * @param string $topLevelNamespace Top level namespace
+  * @param string $app The app name
+  * @param string $appNamespace The application namespace
+  * @param string $controllerNamespace The controller namespace
+  *
   */
-  public function __construct(string $topLevel, string $app)
+  public function __construct(
+    string $topLevelNamespace,
+    string $app,
+    ?string $appNamespace = self::DEFAULT_APP_NAMESPACE,
+    ?string $controllerNamespace = self::DEFAULT_CONTROLLER_NAMESPACE)
   {
-    $this->topLevel = $topLevel;
+    $this->topLevel = $topLevelNamespace;
     $this->app = $app;
+    $this->appNamespace = $appNamespace;
+    $this->controllerNamespace = $controllerNamespace;
   }
 
   /**
@@ -114,8 +124,13 @@ final class Router
   {
     $app = $this->convertToStudlyCaps($app);
     $controller = $this->convertToStudlyCaps($controller);
-    $appSpace = "{$this->topLevel}\\App";
-    return sprintf('%s\\%s\\Controller\\%s', $appSpace, $app, $controller);
+
+    return
+      $this->topLevel .
+      ((!empty($this->appNamespace)) ? "\\{$this->appNamespace}" : '') .
+      "\\$app" .
+      ((!empty($this->controllerNamespace)) ? "\\{$this->controllerNamespace}" : '') .
+      "\\{$controller}";
   }
 
   /**
