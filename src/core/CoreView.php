@@ -97,6 +97,7 @@ class CoreView implements TranslatorAwareInterface
     $this->viewDir = $this->getViewDirectory();
     $this->autoIncludeDir = $this->viewDir;
     $this->mainTemplate = 'main.html';
+    $this->productTitle = '';
   }
 
   /**
@@ -250,28 +251,16 @@ class CoreView implements TranslatorAwareInterface
   /***************************************/
 
   /**
-  * Sets the title (deprecated, but still in use)
-  *
-  * @param mixed $value
-  * @return \Restless\Core\CoreView
-  */
-  public function setTitle($value): self
-  {
-    $this->core->config->pageTitle = $value;
-    return $this;
-  }
-
-  /**
   * Sets the product title that can then be used in the setMetaTitle()
   * and setMetaDescription() methods to provide title substitution.
   *
   * For example, you can call setMetaDescription('Provides something for [title]');
   * the string '[title]' will be replaced with the value set in this method.
   *
-  * @param mixed $value
+  * @param string $value
   * @return \Restless\Core\CoreView
   */
-  public function setProductTitle($value): self
+  public function setProductTitle(string $value): self
   {
     $this->productTitle = $value;
     return $this;
@@ -280,24 +269,24 @@ class CoreView implements TranslatorAwareInterface
   /**
   * Sets the title used in meta data.
   *
-  * @param mixed $value
+  * @param string $value
   * @return \Restless\Core\CoreView
   */
-  public function setMetaTitle($value): self
+  public function setMetaTitle(string $value): self
   {
-    $this->meta->title = str_replace('[title]', $this->productTitle ?? '', $value ?? '');
+    $this->meta->title = str_replace('[title]', $this->productTitle, $value);
     return $this;
   }
 
   /**
   * Sets the description used in meta data.
   *
-  * @param mixed $value
+  * @param string $value
   * @return \Restless\Core\CoreView
   */
-  public function setMetaDescription($value): self
+  public function setMetaDescription(string $value): self
   {
-    $this->meta->description = str_replace('[title]', $this->productTitle ?? '', $value ?? '');
+    $this->meta->description = str_replace('[title]', $this->productTitle, $value);
     return $this;
   }
 
