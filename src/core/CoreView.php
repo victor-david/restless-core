@@ -162,17 +162,6 @@ class CoreView implements TranslatorAwareInterface
   }
 
   /**
-  * Sets the asset root
-  *
-  * @param string $value
-  * @return \Restless\Core\CoreView
-  */
-  public function setAssetRoot(string $value) : self
-  {
-    return $this;
-  }
-
-  /**
   * Sets the main template file name. Only needed if you want to override the default.
   *
   * @param string $value
@@ -289,6 +278,17 @@ class CoreView implements TranslatorAwareInterface
   }
 
   /**
+  * Sets the specified meta data key to the specified value
+  *
+  * @param string $key
+  * @param string $value
+  */
+  public function setMetaValue(string $key, string $value)
+  {
+    $this->meta->$key = $value;
+  }
+
+  /**
   * Includes another file.
   *
   * @param string $fileIndex
@@ -309,18 +309,6 @@ class CoreView implements TranslatorAwareInterface
   public function makeConditional(string $key, $condition)
   {
     $this->conditional[$key] = $condition;
-  }
-
-  /**
-  * Assigns a javascript file reference to be inserted
-  *
-  * @param string $js
-  * @param bool $prependApp
-  */
-  public function insertScript(string $script, $prependApp = true)
-  {
-    if ($prependApp) $script = "{$this->app}/$script";
-    $this->script[] = sprintf('%s/%s', ASSET, $script);
   }
 
   /**
