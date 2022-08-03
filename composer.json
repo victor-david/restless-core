@@ -1,15 +1,17 @@
 {
-  "name": "victor-david/restless-core",
-  "description": "Provides core controller, app, and database components for a Restless app",
+  "name": "restless/restless-core",
+  "description": "Provides core controller, app, database, and logger components for a Restless app",
   "type": "library",
   "require": {
-    "php": ">=7.4"
+    "php": ">=8.0.0",
+    "psr/log": ">=3.0.0"
   },
 
   "autoload": {
     "psr-4": {
       "Restless\\Core\\": "src/core",
-      "Restless\\Database\\": "src/database"
+      "Restless\\Database\\": "src/database",
+      "Restless\\Log\\": "src/log"
     }
   },
 
