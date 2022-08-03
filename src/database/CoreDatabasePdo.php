@@ -274,6 +274,16 @@ class CoreDatabasePdo
     return $this->connection->lastInsertId($name);
   }
 
+  /**
+  * Throws a DatabaseException with the specified message
+  *
+  * @param string $message
+  */
+  public final function throwException(string $message)
+  {
+    throw new DatabaseException($message);
+  }
+
   public final function __get($var)
   {
     echo "CoreDatabase::Get: <b>$var</b> (property does not exist)<br>";
@@ -281,7 +291,7 @@ class CoreDatabasePdo
 
   public final function __call($function, $args)
   {
-    $this->raiseError("CoreDatabase::Call: $function (method does not exist)");
+    $this->throwException("CoreDatabase::Call: $function (method does not exist)");
   }
 
   /******************************/
@@ -307,21 +317,8 @@ class CoreDatabasePdo
   {
     if (!$this->connection)
     {
-      $this->raiseError('A connection does not exist');
+      $this->throwException('A connection does not exist');
     }
-  }
-
-  protected final function raiseError($message)
-  {
-    // TODO: check this
-    throw new \Exception($message);
-//    if ($this->core->exceptions)
-//    {
-//      throw new DatabaseException($errorMessage, $this->core, $this);
-//    }
-//
-//    /* this means that the error was raised during core construction, before the exception were initialized */
-//    throw new CoreException($errorMessage);
   }
 
   /****************************/
@@ -360,7 +357,7 @@ class CoreDatabasePdo
     }
     catch (Exception $e)
     {
-      $this->raiseError('Database connection could not be established');
+      $this->throwException('Database connection could not be established');
     }
   }
 
@@ -371,14 +368,14 @@ class CoreDatabasePdo
       $this->connectDemand();
       $obj = new PDOQueryObject($this->connection, $table, $alias, $type, function ($m)
       {
-        $this->raiseError($m);
+        $this->throwException($m);
       });
 
       return $obj;
     }
     catch (PDOException $e)
     {
-      $this->raiseError($e->getMessage());
+      $this->throwException($e->getMessage());
     }
   }
 }
