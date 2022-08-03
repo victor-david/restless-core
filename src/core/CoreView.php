@@ -162,6 +162,21 @@ class CoreView implements TranslatorAwareInterface
   }
 
   /**
+  * Sets the application name
+  *
+  * This method is only needed if you want to override the application name
+  * that gets set in the constructor
+  *
+  * @param string $value
+  * @return \Restless\Core\CoreView
+  */
+  public function setApplication(string $value) : self
+  {
+    $this->app = $value;
+    return $this;
+  }
+
+  /**
   * Sets the main template file name. Only needed if you want to override the default.
   *
   * @param string $value
@@ -218,23 +233,6 @@ class CoreView implements TranslatorAwareInterface
   public function getCurrentApplicationFileName(string $fileName) : string
   {
     return $this->getApplicationFileName($this->app, $fileName);
-  }
-
-  /**
-  * Gets a path for display purposes. If debug is greater than zero,
-  * returns the path without document root. Otherwise, just the base file name.
-  *
-  * @param string $path
-  * @return string
-  */
-  public function getSafeDisplayPath(string $path): string
-  {
-    if ($this->debug)
-    {
-      $root = dirname($_SERVER['DOCUMENT_ROOT']) . '/';
-      return str_replace($root, '', $path);
-    }
-    return basename($path);
   }
 
   /**
@@ -372,8 +370,7 @@ class CoreView implements TranslatorAwareInterface
 
     if ($mainStr === false)
     {
-      $msgFile = $this->getSafeDisplayPath(($this->debug) ? $mainPath : $this->mainTemplate);
-      throw new ViewException("Template file: $msgFile not found");
+      throw new ViewException("Template file: {$this->getSafeDisplayPath($mainPath)} not found");
     }
 
     $this->merge($mainStr);
@@ -390,6 +387,11 @@ class CoreView implements TranslatorAwareInterface
   {
     $fc = substr($_SERVER['DOCUMENT_ROOT'], 0, 1);
     return (strpos($baseName, $fc) === 0) ? $baseName : $this->getCurrentApplicationFileName($baseName);
+  }
+
+  private function getSafeDisplayPath(string $path): string
+  {
+    return ($this->debug) ? $path : basename($path);
   }
 
   private function getFileContents($fileName)
@@ -443,8 +445,7 @@ class CoreView implements TranslatorAwareInterface
 
           if ($fileStr === false)
           {
-            $msg = $this->getSafeDisplayPath(($this->debug) ? $filePath : $file);
-            $fileStr = "Include file: $msg not found for [$key]";
+            $fileStr = "Include file: {$this->getSafeDisplayPath($filePath)} not found for [$key]";
           }
         }
         $replace[$k]= $fileStr;
@@ -471,8 +472,7 @@ class CoreView implements TranslatorAwareInterface
 
         if ($fileStr === false)
         {
-          $msg = $this->getSafeDisplayPath(($this->debug) ? $filePath : $file);
-          $fileStr = "Auto file: $msg not found";
+          $fileStr = "Auto file: {$this->getSafeDisplayPath($filePath)} not found";
         }
 
         $replace[$k]= $fileStr;
