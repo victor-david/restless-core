@@ -59,7 +59,16 @@ final class Crypto
   {
     $result = '';
     $max = strlen(self::IDCHARS);
+
+    $length = ($length > $max) ? $max : $length;
+
     $length -= strlen($prefix);
+
+    if ($length < 2)
+    {
+      throw new \Exception('Invalid length for id');
+    }
+
     $used = [];
 
     for ($k = 0; $k < $length; $k++)
