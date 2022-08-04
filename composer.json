@@ -1,5 +1,5 @@
 {
-  "name": "restless/restless-core",
+  "name": "restless/core-bundle",
   "description": "Provides core controller, app, database, and logger components for a Restless app",
   "type": "library",
   "require": {
