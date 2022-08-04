@@ -1,3 +1,7 @@
-# Restless Core
+# Restless Core Bundle
 
-Provides core app, controller, and database components for a Restless web app.
+Provides core app, controller, database, and log components.
+
+~~~
+composer require restless/core-bundle
+~~~
