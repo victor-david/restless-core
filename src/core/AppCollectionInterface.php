@@ -9,6 +9,6 @@ interface AppCollectionInterface
   /**
   * Gets a collection of applications.
   */
-  public function getAppCollection() : AppCollection;
+  public function getAppCollection() : ?AppCollection;
 }
 ?>

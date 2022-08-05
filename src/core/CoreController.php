@@ -9,13 +9,11 @@ use Exception;
 * @abstract
 * @property CoreRequest     $request
 * @property CoreView        $view
-* @property AppCollection   $apps
 * @property OpenObject      $get      Args passed in get
 * @property OpenObject      $post     Args passed in post
 * @property OpenObject      $cookie   Args passed in cookie
 * @property OpenObject      $server   Server values
 * @property OpenObject      $system   System values
-* @property object          $config   Configuration values, set by higher level controllers
 */
 abstract class CoreController implements AppCollectionInterface
 {
@@ -24,13 +22,11 @@ abstract class CoreController implements AppCollectionInterface
 
   protected $request;
   public $view;
-  public $apps;
   protected $get;
   protected $post;
   public $cookie;
   public $server;
   public $system;
-  public $config;
   private $assetPath;
 
   /**
@@ -43,17 +39,36 @@ abstract class CoreController implements AppCollectionInterface
   {
     $this->request = $request;
     $this->assetPath = $assetPath;
-    $this->apps = $this->getAppCollection();
     $this->view = new CoreView($this, $this->request->app);
     $this->get = $this->getArguments($_GET);
     $this->post = $this->getArguments($_POST);
     $this->cookie = $this->getArguments($_COOKIE);
     $this->server = $this->getServer();
     $this->system = $this->getSystem();
-    /* this gets populated further in */
-    $this->config = (object)[];
     unset($_GET);
     unset($_POST);
+  }
+
+  /**
+  * Gets a collection of applications.
+  *
+  * You must override this method in a derived class to enable
+  * core view to substitute app values.
+  */
+  public function getAppCollection() : ?AppCollection
+  {
+    return null;
+  }
+
+  /**
+  * Gets a config object.
+  *
+  * You must override this method in a derived class to enable
+  * core view to substitute config values
+  */
+  public function getConfig() : ?object
+  {
+    return null;
   }
 
   /**

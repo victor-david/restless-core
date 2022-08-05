@@ -411,7 +411,7 @@ class CoreView implements TranslatorAwareInterface
     $this->mergeLoops($s);
     $this->mergeApps($s);
 
-    $this->mergeObject($this->core->config, $this->rxConfig, $s);
+    $this->mergeObject($this->core->getConfig(), $this->rxConfig, $s);
     $this->mergeObject($this->core->server, $this->rxServer, $s);
     $this->mergeObject($this->core->system, $this->rxSystem, $s);
     $this->mergeObject($this->core->cookie, $this->rxCookie, $s);
@@ -677,27 +677,31 @@ class CoreView implements TranslatorAwareInterface
   /***************************************/
   private function mergeApps(&$s)
   {
-    $search = [];
-    $replace = [];
-
-    foreach ($this->core->apps as $key => $app)
+    $apps = $this->core->getAppCollection();
+    if ($apps instanceof AppCollection)
     {
-      if ($app instanceof App)
-      {
-        if ($key == 'current') $key = 'curr';
+      $search = [];
+      $replace = [];
 
-        foreach($app as $prop => $dummy)
+      foreach ($apps as $key => $app)
+      {
+        if ($app instanceof App)
         {
-          $search[] = "{%app:$key:$prop%}";
-          $replace[] = $app->$prop;
+          if ($key == 'current') $key = 'curr';
+
+          foreach($app as $prop => $dummy)
+          {
+            $search[] = "{%app:$key:$prop%}";
+            $replace[] = $app->$prop;
+          }
         }
       }
-    }
 
-    $s = str_replace($search, $replace, $s);
+      $s = str_replace($search, $replace, $s);
+    }
   }
 
-  private function mergeObject(object $obj, string $rx, &$s) : bool
+  private function mergeObject(?object $obj, string $rx, &$s) : bool
   {
     $replace= [];
     $out= [];
@@ -707,7 +711,7 @@ class CoreView implements TranslatorAwareInterface
       for ($k= 0; $k < count($out[1]); $k++)
       {
         $key = $out[1][$k];
-        $replace[$k]= $obj->$key;
+        $replace[$k]= $obj?->$key;
       }
       $s = str_replace($out[0], $replace, $s);
       return true;

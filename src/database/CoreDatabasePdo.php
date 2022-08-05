@@ -2,22 +2,15 @@
 namespace Restless\Database;
 
 use Restless\Core\OpenObject;
-use Restless\Core\AppCollection;
 use PDO;
 use PDOException;
 use Exception;
 
 /**
 * Provides underlying methods and properties for a high-level database object.
-*
-* @property AppCollection   $apps
-* @property object          $config
 */
 class CoreDatabasePdo
 {
-  public $apps;
-  public $config;
-
   /**
    * @var Restless\Database\DatabaseConfig
   */
@@ -87,26 +80,6 @@ class CoreDatabasePdo
   public function setConnectionConfig(ConnectionConfig $config)
   {
     $this->connectionConfig = $config;
-  }
-
-  /**
-  * Sets the applications object
-  *
-  * @param AppCollection $apps
-  */
-  public function setApplications(AppCollection $apps)
-  {
-    $this->apps = $apps;
-  }
-
-  /**
-  * Sets the global configuration object
-  *
-  * @param object $config
-  */
-  public function setConfig(object $config)
-  {
-    $this->config = $config;
   }
 
   /**
