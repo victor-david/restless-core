@@ -617,7 +617,7 @@ class CoreView implements TranslatorAwareInterface
       $key = $parm[2];
       if ($parm[3] == 'tag' || empty($this->loop[$key]))
       {
-        $s = substr_replace($s, null, $parm[0] - $adj, $parm[1]);
+        $s = substr_replace($s, '', $parm[0] - $adj, $parm[1]);
         $adj += $parm[1];
       }
       else
