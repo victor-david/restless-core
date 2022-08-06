@@ -703,18 +703,21 @@ class CoreView implements TranslatorAwareInterface
 
   private function mergeObject(?object $obj, string $rx, &$s) : bool
   {
-    $replace= [];
-    $out= [];
-
-    if (preg_match_all($rx, $s, $out))
+    if ($obj != null)
     {
-      for ($k= 0; $k < count($out[1]); $k++)
+      $replace= [];
+      $out= [];
+
+      if (preg_match_all($rx, $s, $out))
       {
-        $key = $out[1][$k];
-        $replace[$k]= $obj?->$key;
+        for ($k= 0; $k < count($out[1]); $k++)
+        {
+          $key = $out[1][$k];
+          $replace[$k]= $obj->$key;
+        }
+        $s = str_replace($out[0], $replace, $s);
+        return true;
       }
-      $s = str_replace($out[0], $replace, $s);
-      return true;
     }
     return false;
   }
