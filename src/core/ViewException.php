@@ -18,5 +18,10 @@ class ViewException extends \Exception
   {
     parent::__construct($message, $code, $previous);
   }
+
+  public static function throwViewException($message, $code = 0, $previous = null)
+  {
+    throw new self($message, $code, $previous);
+  }
 }
 ?>
