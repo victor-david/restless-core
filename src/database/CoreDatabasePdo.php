@@ -32,27 +32,17 @@ class CoreDatabasePdo
   */
   public $locale;
 
-  /******************************/
-  /* SECTION: Public Properties */
-  /******************************/
-
   /**
    * The format string used to make a date string.
    * @var string
   */
-  public $dateFormat = '%b %d, %Y';
-
-  /**
-   * The format string used to make a time string.
-   * @var string
-  */
-  public $timeFormat = '%b %d, %Y %H:%i';
+  public $dateFormatShort = '%b %d, %Y';
 
   /**
    * The format string used to make a long date and time string.
    * @var string
   */
-  public $longTimeFormat = '%b %d, %Y %T';
+  public $dateFormatFull = '%b %d, %Y %T';
 
   /**
   * Class constructor
@@ -64,9 +54,8 @@ class CoreDatabasePdo
   }
 
   /*** public setters ***/
-  public function setDateFormat($value)    { $this->dateFormat = $value ?? $this->dateFormat; }
-  public function setTimeFormat($value)    { $this->timeFormat = $value ?? $this->timeFormat; }
-  public function setLongTimeFormat($value){ $this->longTimeFormat = $value ?? $this->longTimeFormat; }
+  public function setDateFormatShort($value) { if($value) $this->dateFormatShort = $value; }
+  public function setDateFormatFull($value) { if ($value) $this->dateFormatFull = $value; }
 
   /***************************/
   /* SECTION: Public Methods */
