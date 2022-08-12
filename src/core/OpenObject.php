@@ -54,6 +54,7 @@ class OpenObject
   * Gets an OpenObject from a \stdClass object recursively.
   *
   * @param \stdClass $obj
+  *
   * @return OpenObject
   */
   public static function FromStdClass(\stdClass $obj): self
@@ -97,30 +98,34 @@ class OpenObject
   /**
   * Throws an exception if this object is empty
   *
-  * @param string|null $msg
-  *    The message to throw if empty. Leave null for the default.
+  * @param string|null $msg The message to throw if empty, or null for the default.
+  *
+  * @return OpenObject this instance
   */
-  public function throwIfEmpty($msg = null)
+  public function throwIfEmpty($msg = null): self
   {
     if ($this->isEmpty())
     {
       if (!$msg) $msg = 'Data returned an empty result (item does not exist)';
       throw new Exception($msg);
     }
+    return $this;
   }
 
   /**
   * Throws an exception if any of the specified properties evaluate to false
   *
+  * Pass an array of property names to check. This method throws an
+  * exception if a given property evaluates to false with a standard message.
+  *
+  * Pass a corresponding array of messages to customize the exception
+  *
   * @param array $properties
   * @param array|null $messages
-  * @remarks
-  *    Pass an array of property names to check. This method throws an
-  *    exception if a given property evaluates to false with a standard message.
   *
-  *    Pass a corresponding array of messages to customize the exception
+  * @return OpenObject this instance
   */
-  public function throwIfProperty(array $properties, $messages = null)
+  public function throwIfProperty(array $properties, ?array $messages = null): self
   {
     $idx = 0;
     foreach ($properties as $prop)
@@ -136,12 +141,14 @@ class OpenObject
       }
       $idx++;
     }
+    return $this;
   }
 
   /**
   * Gets a boolean value that indicates if the specified property is considered valid.
   *
   * @param mixed $name
+  *
   * @return bool
   */
   protected function evaluateProperty($name): bool
@@ -152,12 +159,13 @@ class OpenObject
   /**
   * Gets a property value of this record
   *
+  * Normally, you simply use $obj->propName to get the value of a property, but sometimes a OpenObject gets populated
+  * with values from ouside the framework. In those cases, the $obj->propName may be syntactically incorrect.
+  * This method provides a manner to retreive those property values, example: $obj->get('property-with-dashes');
+  *
   * @param string $property The name of the property
+  *
   * @return string The value of the property
-  * @remarks
-  *    Normally, you simply use $obj->propName to get the value of a property, but sometimes a OpenObject gets populated
-  *    with values from ouside the framework. In those cases, the $obj->propName may be syntactically incorrect.
-  *    This method provides a manner to retreive those property values, example: $obj->get('property-with-dashes');
   */
   public function get($property)
   {
@@ -168,6 +176,7 @@ class OpenObject
   * Creates a new OpenObject that has only the specified properties
   *
   * @param array $properties A one-dimensional array that lists the desired property names
+  *
   * @return OpenObject
   */
   public function createFiltered($properties): self
@@ -295,13 +304,16 @@ class OpenObject
   * Merges the properties of the specified object into this instance.
   *
   * @param object $obj An object to merge.
+  *
+  * @return OpenObject this instance
   */
-  public function merge(object $obj)
+  public function merge(object $obj): self
   {
     foreach($obj as $key => $value)
     {
       $this->$key = $value;
     }
+    return $this;
   }
 
   /**
