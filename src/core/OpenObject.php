@@ -173,6 +173,25 @@ class OpenObject
   }
 
   /**
+  * Sets specified properties to null if they evaluate as falsy
+  *
+  * @param array $properties
+  *
+  * @return OpenObject
+  */
+  public function setFalsyToNull(array $properties): self
+  {
+    foreach ($properties as $prop)
+    {
+      if (!$this->$prop)
+      {
+        $this->$prop = null;
+      }
+    }
+    return $this;
+  }
+
+  /**
   * Creates a new OpenObject that has only the specified properties
   *
   * @param array $properties A one-dimensional array that lists the desired property names
