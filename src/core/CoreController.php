@@ -321,7 +321,7 @@ abstract class CoreController implements AppCollectionInterface
     {
       foreach($args as $key => $value)
       {
-        $result[strtolower($key)] = (is_array($value)) ? $this->getArguments($value) : trim($value);
+        $result[strtolower((string)$key)] = (is_array($value)) ? $this->getArguments($value) : trim($value);
       }
     }
     return new OpenObject($result);
