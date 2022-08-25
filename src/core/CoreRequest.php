@@ -96,7 +96,7 @@ class CoreRequest
     $this->get = [];
 
     /* gets a prepared url */
-    $this->url = $this->getPreparedUrl($url);
+    $this->url = $this->path = $this->getPreparedUrl($url);
 
     $this->parms = [];
 

@@ -33,7 +33,8 @@ class CoreView implements TranslatorAwareInterface
   private $conditional = [];
   private $productTitle;
   private $meta;
-  private $viewRoot;  // full path to the root of the view directory
+  private $viewRoot;    // full path to the root of the view directory
+  private $autoIncRoot; // full path to the root of the auto include directory
   private $mainTemplate;
 
   /* regex */
@@ -95,6 +96,7 @@ class CoreView implements TranslatorAwareInterface
     $this->meta = new \stdClass();
     /* this must be updated by caller using setRootViewDir(..) */
     $this->viewRoot = '';
+    $this->autoIncRoot = '';
     $this->mainTemplate = 'main.html';
     $this->productTitle = '';
   }
@@ -147,17 +149,33 @@ class CoreView implements TranslatorAwareInterface
   /**** View directories and template files ****/
 
   /**
-  * Sets the full file system path to the root view directory
+  * Sets the full file system path to the root view directory.
   *
-  * An application name is appended to the root view directory
-  * to obtain the full path for a particular app.
+  * This method sets the root view dir and the root auto include dir
+  * to the same value. If the auto include root must be different than
+  * the root view, call setRootAutoIncludeDir AFTER calling this method
   *
   * @param string $value
+  *
   * @return \Restless\Core\CoreView
   */
   public function setRootViewDir(string $value) : self
   {
     $this->viewRoot = $value;
+    $this->autoIncRoot = $value;
+    return $this;
+  }
+
+  /**
+  * Sets the full file system path to the root auto include directory
+  *
+  * @param string $value
+  *
+  * @return \Restless\Core\CoreView
+  */
+  public function setRootAutoIncludeDir(string $value) : self
+  {
+    $this->autoIncRoot = $value;
     return $this;
   }
 
@@ -197,6 +215,17 @@ class CoreView implements TranslatorAwareInterface
   public function getViewDirectory(?string $app = null): string
   {
     return sprintf('%s/%s', $this->viewRoot, $app ?? $this->app);
+  }
+
+  /**
+  * Gets the full path to auto include directory for the specified app or (if null) the current app.
+  *
+  * @param string|null $app
+  * @return string
+  */
+  public function getAutoIncludeDirectory(?string $app = null) : string
+  {
+    return sprintf('%s/%s', $this->autoIncRoot, $app ?? $this->app);
   }
 
   /**
@@ -467,7 +496,7 @@ class CoreView implements TranslatorAwareInterface
       {
         $file = $out[1][$k];
         $fileStr = null;
-        $filePath = "{$this->getFullAutoIncludeDirectory()}/$file";
+        $filePath = "{$this->getAutoIncludeDirectory()}/$file";
         $fileStr = $this->getFileContents($filePath);
 
         if ($fileStr === false)

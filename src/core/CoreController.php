@@ -293,6 +293,17 @@ abstract class CoreController implements AppCollectionInterface
   }
 
   /**
+  * Emits headers to enable client side caching
+  *
+  * @param int $minutes
+  */
+  protected function enableCache(int $minutes)
+  {
+    $seconds = max(abs($minutes) * 60, 60);
+    @header("cache-control: public, max-age=$seconds, s-maxage=$seconds, immutable");
+  }
+
+  /**
   * Converts a dotted string 'get.publisher' to Studly 'GetPublisher';
   *
   * @param string $string
