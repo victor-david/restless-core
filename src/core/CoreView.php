@@ -79,6 +79,22 @@ class CoreView implements TranslatorAwareInterface
   public $minifyHtml = false;
 
   /**
+  * Gets or sets a boolean value that determines if view root
+  * appends the name of the app. The default is true
+  *
+  * @var bool
+  */
+  public $viewRootPerApp = true;
+
+  /**
+  * Gets or sets a boolean value that determines if auto include root
+  * appends the name of the app. The default is true
+  *
+  * @var bool
+  */
+  public $autoIncRootPerApp = true;
+
+  /**
   * @var \Restless\Core\Translator
   */
   protected $translator;
@@ -214,7 +230,10 @@ class CoreView implements TranslatorAwareInterface
   */
   public function getViewDirectory(?string $app = null): string
   {
-    return sprintf('%s/%s', $this->viewRoot, $app ?? $this->app);
+    return
+      ($this->viewRootPerApp || $app != null) ?
+        sprintf('%s/%s', $this->viewRoot, $app ?? $this->app) :
+        $this->viewRoot;
   }
 
   /**
@@ -225,7 +244,10 @@ class CoreView implements TranslatorAwareInterface
   */
   public function getAutoIncludeDirectory(?string $app = null) : string
   {
-    return sprintf('%s/%s', $this->autoIncRoot, $app ?? $this->app);
+    return
+      ($this->autoIncRootPerApp || $app != null) ?
+        sprintf('%s/%s', $this->autoIncRoot, $app ?? $this->app) :
+        $this->autoIncRoot;
   }
 
   /**
