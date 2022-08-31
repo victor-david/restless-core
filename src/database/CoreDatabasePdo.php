@@ -12,7 +12,7 @@ use Exception;
 class CoreDatabasePdo
 {
   /**
-   * @var Restless\Database\DatabaseConfig
+   * @var Restless\Database\ConnectionConfig
   */
   protected $connectionConfig;
 
@@ -69,6 +69,18 @@ class CoreDatabasePdo
   public function setConnectionConfig(ConnectionConfig $config)
   {
     $this->connectionConfig = $config;
+  }
+
+  /**
+  * Gets a clone of the data connection info (user and password removed)
+  *
+  * @return \Restless\Database\ConnectionConfig
+  */
+  public function getConnectionInfo() : ConnectionConfig
+  {
+    $obj = clone $this->connectionConfig;
+    $obj->version = $this->adhoc('select version()')->execute()->fetchColumn(0);
+    return $obj;
   }
 
   /**

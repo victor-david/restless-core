@@ -28,5 +28,11 @@ final class ConnectionConfig
     $this->persist = true;
     $this->timeout = 5;
   }
+
+  public function __clone()
+  {
+    unset($this->password);
+    unset($this->user);
+  }
 }
 ?>
