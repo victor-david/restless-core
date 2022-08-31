@@ -8,33 +8,38 @@ namespace Restless\Core;
 */
 class CoreView implements TranslatorAwareInterface
 {
-  /**
-  * The default section key when including another template piece.
-  */
+  /* The default section key when including another template piece */
   public const DEF_KEY = 'main1';
 
-  /**
-  * @var CoreController
-  */
+  /* The default main template file name */
+  public const DefaultMainTemplate = 'main.html';
+
+  /* CoreController */
   private $core;
 
-  /**
-  * @var string
-  */
+  /* string */
   private $app;
-  private $script = [];
-  private $option = [];
-  private $vars = [];
-  private $obj = [];
-  private $loop = [];
-  private $block = [];
-  private $subBlock = [];
-  private $include = [];
-  private $conditional = [];
-  private $productTitle;
+
+  /* arrays */
+  private $script;
+  private $obj;
+  private $loop;
+  private $include;
+  private $conditional;
+
+  /* object */
   private $meta;
-  private $viewRoot;    // full path to the root of the view directory
-  private $autoIncRoot; // full path to the root of the auto include directory
+
+  /* string */
+  private $productTitle;
+
+  /* string, full path to the root of the view directory */
+  private $viewRoot;
+
+  /* string, full path to the root of the auto include directory */
+  private $autoIncRoot;
+
+  /* string, main template set to self::DefaultMainTemplate in constructor */
   private $mainTemplate;
 
   /* regex */
@@ -67,6 +72,7 @@ class CoreView implements TranslatorAwareInterface
 
   /**
   * Gets or sets a truthy value that specifies whether debug mode is active
+  *
   * @var int
   */
   public $debug = 0;
@@ -109,29 +115,43 @@ class CoreView implements TranslatorAwareInterface
   {
     $this->core = $core;
     $this->app = $app;
-    $this->meta = new \stdClass();
+    $this->script = [];
+    $this->obj = [];
+    $this->loop = [];
+    $this->include = [];
+    $this->conditional = [];
+    $this->meta = (object)[];
     /* this must be updated by caller using setRootViewDir(..) */
     $this->viewRoot = '';
     $this->autoIncRoot = '';
-    $this->mainTemplate = 'main.html';
+    $this->mainTemplate = self::DefaultMainTemplate;
     $this->productTitle = '';
   }
 
   /**
-  * Returns a new CoreView based on this instance with all placeholder properties reset
-  * and the template file set to the specified file (if supplied). The debug and minifyHtml
-  * properties retain their original values.
+  * Returns a new CoreView based on this instance with all placeholder properties
+  * reset and the template file (if supplied) set to the specified value.
   *
-  * @param string|null $template If passed, the main template of the new CoreView is set to this value
+  * This method is a shortcut for obtaining a clone and setting the clone's template.
+  *
+  * @param string|null $template
   * @return CoreView
   */
   public function clone($template = null) : self
   {
-    $view = new CoreView($this->core, $this->app);
-    $view->debug = $this->debug;
-    $view->minifyHtml = $this->minifyHtml;
+    $view = clone $this;
     if ($template) $view->setTemplateFile($template);
     return $view;
+  }
+
+  public function __clone()
+  {
+    $this->script = [];
+    $this->obj = [];
+    $this->loop = [];
+    $this->include = [];
+    $this->conditional = [];
+    $this->meta = (object)[];
   }
 
   /****************** TRANSLATOR *****************/
