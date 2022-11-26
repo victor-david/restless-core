@@ -482,6 +482,7 @@ class CoreView implements TranslatorAwareInterface
     $this->mergeLoops($s);
     $this->mergeApps($s);
 
+    $this->mergeUserObjects($s);
     $this->mergeObject($this->core->getConfig(), $this->rxConfig, $s);
     $this->mergeObject($this->core->server, $this->rxServer, $s);
     $this->mergeObject($this->core->system, $this->rxSystem, $s);
@@ -489,7 +490,6 @@ class CoreView implements TranslatorAwareInterface
     $this->mergeObject($this->meta, $this->rxMeta, $s);
 
     $this->mergeLanguage($s);
-    $this->mergeUserObjects($s);
     $this->mergeScript($s);
   }
 
