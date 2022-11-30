@@ -358,6 +358,17 @@ class CoreView implements TranslatorAwareInterface
   }
 
   /**
+  * Gets the meta for the specified key
+  *
+  * @param string $key
+  * @return string|null
+  */
+  public function getMetaValue(string $key) : ?string
+  {
+    return $this->meta->$key ?: null;
+  }
+
+  /**
   * Includes another file.
   *
   * @param string $fileIndex
