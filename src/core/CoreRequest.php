@@ -190,6 +190,25 @@ class CoreRequest
   }
 
   /**
+  * Gets the request parameters as a string
+  *
+  * @return string|null
+  */
+  public function getParameterString() : ?string
+  {
+    if (count($this->parms))
+    {
+      $result = '';
+      foreach($this->parms as $parm)
+      {
+        $result .= "/$parm";
+      }
+      return $result;
+    }
+    return null;
+  }
+
+  /**
   * Populates $this->get from $_SERVER['REQUEST_URI'].
   *
   * This is an opt-in functionality. If you don't call this method,
