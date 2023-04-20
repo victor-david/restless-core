@@ -93,17 +93,9 @@ abstract class CoreController implements AppCollectionInterface
     {
       if ($this->before())
       {
-        try
-        {
-          $this->initialize();
-          call_user_func_array([$this, $method], $args);
-          $this->after();
-        }
-        catch (ApplicationException $ae)
-        {
-          $this->view->includeFile($ae->section ?: CoreView::DEF_KEY, $ae->displayFile);
-          $this->view->present();
-        }
+        $this->initialize();
+        call_user_func_array([$this, $method], $args);
+        $this->after();
       }
     }
     else
