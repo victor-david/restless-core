@@ -6,53 +6,48 @@ namespace Restless\Core;
 *
 * @author  : Victor D. Sandiego
 */
-class ControllerException extends \Exception
+class ControllerException extends BaseException
 {
   const HTTP_NOT_FOUND = 404;
   const HTTP_INTERNAL_ERROR = 500;
   const HTTP_SERVICE_UNAVAILABLE = 503;
 
-  /**
-   * Class constructor
-   *
-   * @param string $message Exception message
-   * @param CoreRequest
-   * @param int $code
-   * @param mixed $previous
-  */
-  private function __construct($message, int $code, $previous = null)
+  private function __construct($message, int $code, ?CoreRequest $request)
   {
-    parent::__construct($message, $code, $previous);
+    parent::__construct($message, $code, $request);
   }
 
   /**
   * Throws a ControllerException with exception code set to self::HTTP_NOT_FOUND
   *
   * @param string $message
+  * @param CoreRequest|null $request
   */
-  public static function throwControllerNotFoundException(string $message)
+  public static function throwControllerNotFoundException(string $message, ?CoreRequest $request = null)
   {
-    throw new self($message, self::HTTP_NOT_FOUND);
+    throw new self($message, self::HTTP_NOT_FOUND, $request);
   }
 
   /**
   * Throws a ControllerException with exception code set to self::HTTP_NOT_FOUND
   *
   * @param string $message
+  * @param CoreRequest|null $request
   */
-  public static function throwMethodNotFoundException(string $message)
+  public static function throwMethodNotFoundException(string $message, ?CoreRequest $request = null)
   {
-    throw new self($message, self::HTTP_NOT_FOUND);
+    throw new self($message, self::HTTP_NOT_FOUND, $request);
   }
 
   /**
   * Throws a ControllerException with exception code set to self::HTTP_INTERNAL_ERROR
   *
   * @param string $message
+  * @param CoreRequest|null $request
   */
-  public static function throwMethodDirectException(string $message)
+  public static function throwMethodDirectException(string $message, ?CoreRequest $request = null)
   {
-    throw new self($message, self::HTTP_INTERNAL_ERROR);
+    throw new self($message, self::HTTP_INTERNAL_ERROR, $request);
   }
 }
 ?>

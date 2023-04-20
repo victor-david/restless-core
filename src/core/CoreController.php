@@ -101,7 +101,7 @@ abstract class CoreController implements AppCollectionInterface
     else
     {
       $controller = get_class($this);
-      ControllerException::throwMethodNotFoundException("Method [$method] not found in controller [$controller]");
+      ControllerException::throwMethodNotFoundException("Method [$method] not found in controller [$controller]", $this->request);
     }
   }
 
