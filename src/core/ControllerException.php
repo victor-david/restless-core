@@ -2,7 +2,7 @@
 namespace Restless\Core;
 
 /**
-* Represents an exception that occurs during controller initialization
+* Represents an exception that occurs during controller initialization.
 *
 * @author  : Victor D. Sandiego
 */
