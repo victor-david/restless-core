@@ -81,12 +81,12 @@ final class Router
       }
       else
       {
-        ControllerException::throwMethodDirectException("Method [$action] in controller [$controller] cannot be called directly", $this->request);
+        ControllerException::throwMethodDirectException("Method [$action] in controller [$controller] cannot be called directly");
       }
     }
     else
     {
-      ControllerException::throwControllerNotFoundException("Controller [$controller] not found", $this->request);
+      ControllerException::throwControllerNotFoundException("Controller [$controller] not found");
     }
   }
 
