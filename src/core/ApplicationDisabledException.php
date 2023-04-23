@@ -6,22 +6,22 @@ namespace Restless\Core;
 *
 * @author  : Victor D. Sandiego
 */
-class ApplicationDisabledException extends BaseException
+class ApplicationDisabledException extends \Exception
 {
   /**
   * Class constructor
   */
-  private function __construct(?CoreRequest $request)
+  private function __construct()
   {
-    parent::__construct('Application disabled', ControllerException::HTTP_SERVICE_UNAVAILABLE, $request);
+    parent::__construct('Application disabled', ControllerException::HTTP_SERVICE_UNAVAILABLE, null);
   }
 
   /**
   * Throws an ApplicationDisabledException
   */
-  public static function throwApplicationDisabled(?CoreRequest $request = null)
+  public static function throwApplicationDisabled()
   {
-    throw new self($request);
+    throw new self();
   }
 }
 ?>
