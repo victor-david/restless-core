@@ -9,6 +9,8 @@ namespace Restless\Database;
 */
 abstract class DataObject implements TransactionInterface
 {
+  protected const SqlDateFormat = 'Y-m-d H:i:s';
+
   protected $db;
 
   protected function __construct(CoreDatabasePdo $db)
@@ -49,6 +51,26 @@ abstract class DataObject implements TransactionInterface
   public function rollbackTransaction()
   {
     $this->db->rollbackTransaction();
+  }
+
+  /**
+  * Gets a \DateTimeImmutable with the current date/time in UTC
+  */
+  protected function getUtcNow() : \DateTimeImmutable
+  {
+    return new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+  }
+
+  /**
+  * Gets the current date/time UTC in a string suitable for the database
+  *
+  * @param string $format The format or omit for default
+  * @return string
+  */
+  protected function getUtcNowDateStr(string $format = self::SqlDateFormat) : string
+  {
+    $now = $this->getUtcNow();
+    return $now->format($format);
   }
 
   /**
