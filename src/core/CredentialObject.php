@@ -23,6 +23,10 @@ class CredentialObject
   * Specifies that the credential type is email / password
   */
   public const AUTH_PASSWORD = 2;
+  /**
+  * Specifies that the credential type is email only (token callback)
+  */
+  public const AUTH_EMAIL = 3;
 
   public $authtype;
   public $appxid;
