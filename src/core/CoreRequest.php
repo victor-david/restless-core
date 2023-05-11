@@ -46,6 +46,13 @@ class CoreRequest
   public $path;
 
   /**
+  * Gets an array of path parts
+  *
+  * @var array
+  */
+  public $parts;
+
+  /**
   * Gets the string name of the application
   *
   * @var string
@@ -151,6 +158,19 @@ class CoreRequest
     }
 
     $this->path = empty($this->path) ? '/' : $this->path;
+
+    $this->parts = preg_split('@/@', $this->path, -1, PREG_SPLIT_NO_EMPTY);
+  }
+
+  /**
+  * Pushes a parameter onto the request
+  *
+  * @param mixed $name
+  * @param mixed $value
+  */
+  public function pushParameter($name, $value)
+  {
+    $this->parms[] = "$name:$value";
   }
 
   /**

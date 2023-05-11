@@ -88,6 +88,17 @@ abstract class CoreController implements AppCollectionInterface
     $method = $name . 'Action';
 
     $methodExists = method_exists($this, $method);
+    if (!$methodExists)
+    {
+      $override = $this->getMethodOverride($this->request->action);
+      if (count($override) == 2)
+      {
+        $this->request->pushParameter($override[1], $this->request->action);
+        $this->request->action = $override[0];
+        $method = $override[0] . 'Action';
+        $methodExists = method_exists($this, $method);
+      }
+    }
 
     if ($methodExists)
     {
@@ -115,6 +126,21 @@ abstract class CoreController implements AppCollectionInterface
   {
     $method .= 'Action';
     return method_exists($this, $method);
+  }
+
+  /**
+  * Called when the method inside the controller doesn't exist to route to another method
+  * and pass the missing piece as a parm.
+  *
+  * This method should return an array with two elements [0=>the method name, 1 => the parm name]
+  *
+  * @param string $name
+  *
+  * @return array
+  */
+  protected function getMethodOverride(string $name): array
+  {
+    return [];
   }
 
   /**
