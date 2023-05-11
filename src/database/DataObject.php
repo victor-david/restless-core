@@ -24,7 +24,7 @@ abstract class DataObject implements TransactionInterface
   * @param CoreDatabasePdo $db
   * @return static
   */
-  public static function create(CoreDatabasePdo $db)
+  public static function create(CoreDatabasePdo $db) : static
   {
     return new static($db);
   }
@@ -108,6 +108,7 @@ abstract class DataObject implements TransactionInterface
   * Creates a new object that has only the specified properties.
   *
   * @param array $props A one-dimensional array that lists the desired property names.
+  *
   * @return object
   */
   public function createFilteredObj(array $props): object

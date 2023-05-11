@@ -21,9 +21,10 @@ abstract class Module
   * Initializes and returns an instance
   *
   * @param CoreDatabasePdo $db
+  *
   * @return static
   */
-  public static function create(CoreDatabasePdo $db)
+  public static function create(CoreDatabasePdo $db): static
   {
     return new static($db);
   }

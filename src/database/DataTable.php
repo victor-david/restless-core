@@ -56,9 +56,10 @@ abstract class DataTable extends DataObject
   *
   * @param mixed $id
   * @param string $field (default null uses $this->defaultId)
+  *
   * @return static
   */
-  public function selectById($id, ?string $field = null): self
+  public function selectById($id, ?string $field = null): static
   {
     $field = $field ?: $this->defaultId;
     return $this->where("$field=?")->parms($id)->max(1)->select();
@@ -70,9 +71,10 @@ abstract class DataTable extends DataObject
   * is not additive; multiple calls replace the previous specification.
   *
   * @param mixed $value
+  *
   * @return static
   */
-  public function fields($value): self
+  public function fields($value): static
   {
     if ($value) $this->fields = $value;
     return $this;
@@ -82,9 +84,10 @@ abstract class DataTable extends DataObject
   * Sets the where condition.
   *
   * @param string|null $value
+  *
   * @return static
   */
-  public function where($value): self
+  public function where($value): static
   {
     $this->where = $value;
     return $this;
@@ -94,9 +97,10 @@ abstract class DataTable extends DataObject
    * Adds parameters for token substitution
    *
    * @param mixed ...$parms
+   *
    * @return static
    */
-  public function parms(...$parms): self
+  public function parms(...$parms): static
   {
     $this->parms = $parms;
     return $this;
@@ -106,9 +110,10 @@ abstract class DataTable extends DataObject
   * Sets the order by
   *
   * @param string $value
+  *
   * @return static
   */
-  public function orderBy(string $value): self
+  public function orderBy(string $value): static
   {
     $this->orderBy = $value;
     return $this;
@@ -118,9 +123,10 @@ abstract class DataTable extends DataObject
   * Sets the maximum number of results
   *
   * @param int $value
+  *
   * @return static
   */
-  public function max(int $value): self
+  public function max(int $value): static
   {
     $this->max = $value;
     return $this;
@@ -130,9 +136,10 @@ abstract class DataTable extends DataObject
   * Populates the specified properties with their assigned values.
   *
   * @param array|object $values An associative array or an object that contains what to populate.
+  *
   * @return static
   */
-  public function setProperties($values): self
+  public function setProperties($values): static
   {
     if (is_array($values)) $values = (object)$values;
     if (is_object($values))
@@ -161,6 +168,8 @@ abstract class DataTable extends DataObject
   * Gets a boolean value that indicates if this is an object
   * that has been found and populated. Checks for the presence
   * of $this->primaryKey
+  *
+  * @return bool
   */
   public function isSelectedObject(): bool
   {
@@ -177,9 +186,10 @@ abstract class DataTable extends DataObject
   * $this->getSelectCount() does not equal one.
   *
   * @param string|null $msg The message to throw if empty, or null for default.
+  *
   * @return static
   */
-  public final function throwIfEmpty(?string $msg = null): self
+  public final function throwIfEmpty(?string $msg = null): static
   {
     if ($this->getSelectCount() != 1)
     {
@@ -194,7 +204,7 @@ abstract class DataTable extends DataObject
   *
   * @return static
   */
-  public function selectSingle(): self
+  public function selectSingle(): static
   {
     return $this->max(1)->select();
   }
@@ -203,9 +213,10 @@ abstract class DataTable extends DataObject
   * Helper method for clarify, returns $this->max($max)->select()
   *
   * @param int $max (default zero, no max)
+  *
   * @return static
   */
-  public function selectMultiple(int $max = 0): self
+  public function selectMultiple(int $max = 0): static
   {
     return $this->max($max)->select();
   }
@@ -223,6 +234,7 @@ abstract class DataTable extends DataObject
   *
   * @param string $table
   * @param string|null $alias
+  *
   * @return \Restless\Database\PDOQueryObject
   */
   protected function selectp(string $alias = null): PDOQueryObject
@@ -264,6 +276,7 @@ abstract class DataTable extends DataObject
   * Begins an ad hoc operation.
   *
   * @param string $sql
+  *
   * @return \Restless\Database\PDOQueryObject
   */
   protected function adhoc(string $sql): PDOQueryObject
@@ -298,8 +311,10 @@ abstract class DataTable extends DataObject
   * Override (call parent) if you need property name transformations.
   *
   * @param mixed $obj
+  *
+  * @return static
   */
-  protected function populate($obj): self
+  protected function populate($obj): static
   {
     $this->selectCount = 0;
     /* if select statement got no records, $obj is not an object */
@@ -322,6 +337,7 @@ abstract class DataTable extends DataObject
   * Used by derived classes to create an array in their update() or insert() methods.
   *
   * @param array $fields
+  *
   * @return array
   */
   protected final function getUpdateData(array $fields): array
@@ -358,6 +374,7 @@ abstract class DataTable extends DataObject
   *
   * @param array $props
   * @param array|null $messages
+  *
   * @return array
   * @throws \Exception
   */
@@ -388,6 +405,7 @@ abstract class DataTable extends DataObject
   * Override if you need other logic.
   *
   * @param mixed $name
+  *
   * @return int 0|1
   */
   protected function evaluateProperty($name): int
