@@ -2,37 +2,77 @@
 namespace Restless\Database;
 
 /**
-* Provides configuration values to access a database
-*
-* @property string  $database   Name of the database
-* @property string  $host       Host name
-* @property string  $password   Password to connect
-* @property bool    $persist    Persistent connection, default true
-* @property string  $prefix     Prefix, default 'mysql'
-* @property int     $timeout    Connection timeout, default 5 seconds
-* @property string  $user       Name of database user
-*/
+ * Provides configuration values to access a database
+ */
 final class ConnectionConfig
 {
-  public $database;
-  public $host;
-  public $password;
-  public $persist;
-  public $prefix;
-  public $timeout;
-  public $user;
+    /**
+     * Name of the database
+     *
+     * @var string
+     */
+    public $database;
 
-  public function __construct()
-  {
-    $this->prefix = 'mysql';
-    $this->persist = true;
-    $this->timeout = 5;
-  }
+    /**
+     * Host for the database
+     *
+     * @var string
+     */
+    public $host;
 
-  public function __clone()
-  {
-    unset($this->password);
-    unset($this->user);
-  }
+    /**
+     * Password to connect
+     *
+     * @var string
+     */
+    public $password;
+
+    /**
+     * Persistent connection, default is true
+     *
+     * @var bool
+     */
+    public $persist;
+
+    /**
+     * Prefix, default mysql
+     *
+     * @var string
+     */
+    public $prefix;
+
+    /**
+     * Connection timeout, default 5 seconds
+     *
+     * @var int
+     */
+    public $timeout;
+
+    /**
+     * Name of database user
+     *
+     * @var string
+     */
+    public $user;
+
+    /**
+     * Version
+     *
+     * @var string
+     */
+    public $version;
+
+    public function __construct()
+    {
+        $this->prefix = 'mysql';
+        $this->persist = true;
+        $this->timeout = 5;
+    }
+
+    public function __clone()
+    {
+        unset($this->password);
+        unset($this->user);
+    }
 }
 ?>
