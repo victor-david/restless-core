@@ -3,6 +3,6 @@ namespace Restless\Log;
 
 interface ProcessorInterface
 {
-  public function __invoke(LogMessageObject $msg);
+    public function __invoke(LogMessageObject $msg);
 }
 ?>
