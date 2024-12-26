@@ -2,13 +2,13 @@
 namespace Restless\Core;
 
 /**
-* Describes an instance can supports application definitions
-*/
+ * Describes an instance can supports application definitions
+ */
 interface AppInterface
 {
-  /**
-  * Gets a single application.
-  */
-  public function getApp(array $row) : App;
+    /**
+     * Gets a single application.
+     */
+    public function getApp(array $row) : App;
 }
 ?>
