@@ -9,6 +9,9 @@ namespace Restless\Core;
 class CoreSession
 {
     private $implementor;
+    private $sessionTimeout;
+    private $sessionPath;
+    private $sessionHttps;
 
     /**
      * Gets the current application
@@ -25,28 +28,88 @@ class CoreSession
     private $sessionInfo;
 
     /**
-     * Class constructor
+     * Class constructor.
+     *
+     * @param App $app
      */
     public function __construct(App $app)
     {
         $this->app = $app;
         $this->sessionInfo = null;
+        $this->sessionTimeout = 60;
+        $this->sessionPath = '/';
+        $this->sessionHttps = false;
+    }
+
+    /**
+     * Static creator, useful for call chaining.
+     *
+     * @param App $app
+     *
+     * @return CoreSession
+     */
+    public static function create(App $app) : self
+    {
+        return new CoreSession($app);
     }
 
     /**
      * Sets the implementor that will handle the session authentication, creation, etc.
      *
      * @param SessionInterface $implementor
+     *
+     * @return CoreSession
      */
-    public function setImplementor(SessionInterface $implementor)
+    public function setImplementor(SessionInterface $implementor) : self
     {
         $this->implementor = $implementor;
+        return $this;
     }
 
     /**
-     * Authenticates the specified credentials
+     * Sets the session timeout in minutes. Default is 60.
+     *
+     * @param int $value
+     *
+     * @return CoreSession
+     */
+    public function setTimeout(int $value) : self
+    {
+        $this->sessionTimeout = $value;
+        return $this;
+    }
+
+    /**
+     * Sets the session path. Default is '/'
+     *
+     * @param string $value
+     *
+     * @return CoreSession
+     */
+    public function setSessionPath(string $value) : self
+    {
+        $this->sessionPath = $value;
+        return $this;
+    }
+
+    /**
+     * Sets a value that determines if the session cookie is only sent over https. Default is false.
+     *
+     * @param bool $value
+     *
+     * @return CoreSession
+     */
+    public function setSessionHttps(bool $value) : self
+    {
+        $this->sessionHttps = $value;
+        return $this;
+    }
+
+    /**
+     * Authenticates the specified credentials.
      *
      * @param CredentialObject $credential
+     *
      * @throws Exception if credentials don't authenticate
      */
     public function authenticate(CredentialObject $credential)
@@ -55,12 +118,12 @@ class CoreSession
         /* authenicate() throws if can't authenticate */
         $user = $this->implementor->authenticate($credential);
         /* if we get here, authentication is okay */
-        $session = $this->implementor->createSession($user, (int)$this->app->timeout);
-        setcookie($session->id, $session->token, 0, $this->app->sessionpath, '', $this->app->https ? true : false, true);
+        $session = $this->implementor->createSession($user, (int)$this->sessionTimeout);
+        setcookie($session->id, $session->token, 0, $this->sessionPath, '', $this->sessionHttps, true);
     }
 
     /**
-     * Gets the session info
+     * Gets the session info.
      *
      * @return UserSession|null
      */
@@ -85,6 +148,9 @@ class CoreSession
         return null;
     }
 
+    /**
+     * Ends the session
+     */
     public function endSession()
     {
         $this->validateImplementor();
@@ -92,7 +158,7 @@ class CoreSession
         if ($session)
         {
             $this->implementor->endSession($session);
-            setcookie($session->id, '', time() - 3600, $this->app->sessionpath);
+            setcookie($session->id, '', time() - 3600, $this->sessionPath);
         }
     }
 
