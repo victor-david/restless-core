@@ -929,7 +929,7 @@ class CoreView implements TranslatorAwareInterface
 
         if ($this->minifyHtml > 1)
         {
-            $s = str_replace("\n",'', $s);
+            $s = str_replace(["\n","\r"],'', $s);
         }
     }
 }
