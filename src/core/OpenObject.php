@@ -8,8 +8,9 @@ use Exception;
  * This class provides an object that can create properties on the fly, plus
  * various methods to manipulate the properties.
  *
+ * 2025-01-17 - Extends stdClass to avoid warnings in Php 8.3
  */
-class OpenObject
+class OpenObject extends \stdClass
 {
     /**
      * Class constructor
