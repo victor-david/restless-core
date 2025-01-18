@@ -62,6 +62,13 @@ final class ConnectionConfig
      */
     public $version;
 
+    /**
+     * Guid. Some implementors assign a guid to the connection info
+     *
+     * @var string|null
+     */
+    public $guid;
+
     public function __construct()
     {
         $this->prefix = 'mysql';

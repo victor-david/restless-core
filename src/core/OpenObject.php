@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 namespace Restless\Core;
+
 use Exception;
 
 /**
@@ -8,9 +9,10 @@ use Exception;
  * This class provides an object that can create properties on the fly, plus
  * various methods to manipulate the properties.
  *
- * 2025-01-17 - Extends stdClass to avoid warnings in Php 8.3
+ * 2025-01-18 - Add attribute to avoid warnings in Php 8.2
  */
-class OpenObject extends \stdClass
+#[\AllowDynamicProperties]
+class OpenObject
 {
     /**
      * Class constructor
