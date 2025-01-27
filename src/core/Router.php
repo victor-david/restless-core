@@ -149,7 +149,7 @@ final class Router
   *
   * @return string
   */
-  private function convertToStudlyCaps($string)
+  private function convertToStudlyCaps(string $string)
   {
     return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
   }
@@ -162,7 +162,7 @@ final class Router
   *
   * @return string
   */
-  private function convertToCamelCase($string)
+  private function convertToCamelCase(string $string)
   {
     return lcfirst($this->convertToStudlyCaps($string));
   }

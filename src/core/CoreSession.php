@@ -127,7 +127,7 @@ class CoreSession
      *
      * @return UserSession|null
      */
-    public function getSessionInfo(): ?UserSession
+    public function getSessionInfo(): UserSession|null
     {
         /* Get cached session info if available */
         if ($this->sessionInfo)

@@ -12,7 +12,7 @@ class Utility
      * @param string $contentType The content type, i.e. 'application/json'
      * @param string $charSet The char set or omit for default of utf-8
      */
-    public static function setContentType($contentType, $charSet = 'utf-8')
+    public static function setContentType(string $contentType, string $charSet = 'utf-8')
     {
         if ($contentType)
         {
@@ -25,7 +25,7 @@ class Utility
      *
      * @param string $charSet The char set or omit for default of utf-8
      */
-    public static function setJsonContentType($charSet = 'utf-8')
+    public static function setJsonContentType(string $charSet = 'utf-8')
     {
         self::setContentType('application/json', $charSet);
     }

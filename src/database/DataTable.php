@@ -97,11 +97,11 @@ abstract class DataTable extends DataObject
      * by default when calling this method.
      *
      * @param mixed $id
-     * @param string $field (default null uses $this->defaultId)
+     * @param string|null $field (default null uses $this->defaultId)
      *
      * @return static
      */
-    public function selectById($id, ?string $field = null): static
+    public function selectById(mixed $id, string|null $field = null): static
     {
         $field = $field ?: $this->defaultId;
         return $this->where("$field=?")->parms($id)->max(1)->select();
@@ -112,11 +112,11 @@ abstract class DataTable extends DataObject
      * Unlike the underlying PDO fields specifier, this method
      * is not additive; multiple calls replace the previous specification.
      *
-     * @param mixed $value
+     * @param string|null $value
      *
      * @return static
      */
-    public function fields($value): static
+    public function fields(string|null $value): static
     {
         if ($value)
         {
@@ -132,7 +132,7 @@ abstract class DataTable extends DataObject
      *
      * @return static
      */
-    public function where($value): static
+    public function where(string|null $value): static
     {
         $this->where = $value;
         return $this;
@@ -145,7 +145,7 @@ abstract class DataTable extends DataObject
      *
      * @return static
      */
-    public function parms(...$parms): static
+    public function parms(mixed ...$parms): static
     {
         $this->parms = $parms;
         return $this;
@@ -154,11 +154,11 @@ abstract class DataTable extends DataObject
     /**
      * Sets the order by
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return static
      */
-    public function orderBy(string $value): static
+    public function orderBy(string|null $value): static
     {
         $this->orderBy = $value;
         return $this;
@@ -184,7 +184,7 @@ abstract class DataTable extends DataObject
      *
      * @return static
      */
-    public function setProperties($values): static
+    public function setProperties(array|object $values): static
     {
         if (is_array($values))
         {
@@ -237,7 +237,7 @@ abstract class DataTable extends DataObject
      *
      * @return static
      */
-    public final function throwIfEmpty(?string $msg = null): static
+    public final function throwIfEmpty(string|null $msg = null): static
     {
         if ($this->getSelectCount() != 1)
         {
@@ -287,7 +287,7 @@ abstract class DataTable extends DataObject
      *
      * @return \Restless\Database\PDOQueryObject
      */
-    protected function selectp(string $alias = null): PDOQueryObject
+    protected function selectp(string|null $alias = null): PDOQueryObject
     {
         return $this->db->selectFrom($this->table, $alias);
     }
@@ -338,7 +338,7 @@ abstract class DataTable extends DataObject
      * Processes the pdo statement.
      *
      * Examines $this->max to determine whether to populate instance properties directly (single select)
-     * orto populate $this->data (array, multiple select) - and sets $this->selectCount accordingly.
+     * or to populate $this->data (array, multiple select) - and sets $this->selectCount accordingly.
      *
      * @param \PDOStatement $statement
      */
@@ -408,7 +408,7 @@ abstract class DataTable extends DataObject
      * if no where condition has been defined. If a where condition has already
      * been defined, this method does nothing.
      */
-    protected final function setDefaultWhereIf($id)
+    protected final function setDefaultWhereIf(mixed $id)
     {
         if (!$this->where)
         {
@@ -428,7 +428,7 @@ abstract class DataTable extends DataObject
      * @return array
      * @throws \Exception
      */
-    protected final function createFilteredOrThrow(array $props, $messages = null) : array
+    protected final function createFilteredOrThrow(array $props, array|null $messages = null) : array
     {
         $idx = 0;
         $result = [];
@@ -454,11 +454,11 @@ abstract class DataTable extends DataObject
      * Returns 1 if the property exists and is set; otherwise zero.
      * Override if you need other logic.
      *
-     * @param mixed $name
+     * @param string $name
      *
      * @return int 0|1
      */
-    protected function evaluateProperty($name): int
+    protected function evaluateProperty(string $name): int
     {
         return property_exists($this, $name) && isset($this->$name) ? 1 : 0;
     }

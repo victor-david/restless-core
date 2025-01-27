@@ -104,7 +104,7 @@ class OpenObject
      *
      * @return OpenObject this instance
      */
-    public function throwIfEmpty($msg = null): self
+    public function throwIfEmpty(string|null $msg = null): self
     {
         if ($this->isEmpty())
         {
@@ -127,7 +127,7 @@ class OpenObject
      *
      * @return OpenObject this instance
      */
-    public function throwIfProperty(array $properties, ?array $messages = null): self
+    public function throwIfProperty(array $properties, array|null $messages = null): self
     {
         $idx = 0;
         foreach ($properties as $prop)
@@ -169,7 +169,7 @@ class OpenObject
      *
      * @return string The value of the property
      */
-    public function get($property)
+    public function get(string $property)
     {
         return $this->$property;
     }
@@ -200,11 +200,9 @@ class OpenObject
      *
      * @return OpenObject
      */
-    public function createFiltered($properties): self
+    public function createFiltered(array $properties): self
     {
-        if (!is_array($properties)) $properties = array();
-
-        $filtered = array();
+        $filtered = [];
 
         foreach($properties as $name)
         {
@@ -313,7 +311,7 @@ class OpenObject
      */
     public function toArray(): array
     {
-        $result = array();
+        $result = [];
         foreach ($this as $key => $value)
         {
             $result[$key] = $value;
@@ -345,7 +343,7 @@ class OpenObject
      *
      * @param bool $full true = Full display using print_r; false = custom display
      */
-    public function display($full = false)
+    public function display(bool $full = false)
     {
         $text = ($full) ? print_r($this, true) : $this->createDumpText(0, $this);
         echo sprintf('<pre>%s</pre>', $text);

@@ -43,7 +43,7 @@ class PDOQueryObject
      * @param int $type
      * @param Closure $handler
      */
-    public function __construct(PDO $connection, string $table, ?string $alias, int $type, Closure $handler)
+    public function __construct(PDO $connection, string $table, string|null $alias, int $type, Closure $handler)
     {
         $this->connection = $connection;
         $this->table = $table;
@@ -63,7 +63,7 @@ class PDOQueryObject
      * @return PDOQueryObject
      * @throws Exception
      */
-    public function fields(?string $fields): self
+    public function fields(string|null $fields): self
     {
         if ($this->type != self::SELECT && $this->type != self::INSERT)
         {
@@ -91,7 +91,7 @@ class PDOQueryObject
      * @return PDOQueryObject
      * @throws Exception
      */
-    public function join(string $table, ?string $alias, string $on, string $type = 'LEFT'): self
+    public function join(string $table, string|null $alias, string $on, string $type = 'LEFT'): self
     {
         if ($this->type != self::SELECT)
         {
@@ -129,7 +129,7 @@ class PDOQueryObject
      * @return $this
      * @throws Exception
      */
-    public function data($data): self
+    public function data(string|array|OpenObject $data): self
     {
         if ($this->type != self::INSERT && $this->type != self::UPDATE)
         {
@@ -215,7 +215,7 @@ class PDOQueryObject
      *
      * @return $this
      */
-    public function parms(...$parms): self
+    public function parms(mixed ...$parms): self
     {
         $this->parms = $parms;
         return $this;
@@ -228,7 +228,7 @@ class PDOQueryObject
      *
      * @return $this
      */
-    public function types(...$types): self
+    public function types(mixed ...$types): self
     {
         $this->types = $types;
         return $this;
@@ -298,11 +298,10 @@ class PDOQueryObject
         }
         catch (Exception $e)
         {
-        $method = $this->handler;
-        $method($e->getMessage());
+            $method = $this->handler;
+            $method($e->getMessage());
         }
     }
-
 
     private function buildSql(): string
     {
@@ -351,7 +350,7 @@ class PDOQueryObject
         }
     }
 
-    private function getJoin() : ?string
+    private function getJoin() : string|null
     {
         if (count($this->join) == 0)
         {

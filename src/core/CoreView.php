@@ -380,7 +380,7 @@ class CoreView implements TranslatorAwareInterface
      *
      * @return string|null
      */
-    public function getMetaValue(string $key) : ?string
+    public function getMetaValue(string $key) : string|null
     {
         return $this->meta->$key ?: null;
     }
@@ -393,7 +393,7 @@ class CoreView implements TranslatorAwareInterface
      * @param string $fileIndex
      * @param string $fileName
      */
-    public function includeFile(string $key, string $file): void
+    public function includeFile(string $key, string $file)
     {
         if (!$key || !$file)
         {
@@ -408,7 +408,7 @@ class CoreView implements TranslatorAwareInterface
      * @param string $key
      * @param mixed $condition
      */
-    public function makeConditional(string $key, $condition)
+    public function makeConditional(string $key, mixed $condition)
     {
         $this->conditional[$key] = $condition;
     }
@@ -420,7 +420,7 @@ class CoreView implements TranslatorAwareInterface
      * @param array|object $obj
      * @param string $key An optional key. If omitted, defaults to 'def'
      */
-    public function insertObj($obj, string $key = 'def')
+    public function insertObj(array|object $obj, string $key = 'def')
     {
         if (is_array($obj))
         {
@@ -444,7 +444,7 @@ class CoreView implements TranslatorAwareInterface
      * @param string $key
      * @param callable|null $callback
      */
-    public function insertLoop(array $data, string $key, $callback = null)
+    public function insertLoop(array $data, string $key, callable|null $callback = null)
     {
         array_walk($data, function(&$v) { $v = (object)$v;});
         $this->loop[$key] = [$data, $callback];

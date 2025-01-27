@@ -194,11 +194,11 @@ class CoreRequest
      * Gets a named parameter
      *
      * @param string $name The plain name of the parm, eg. 'id'
-     * @param mixed $default Default value ti return if paramater doesn't exist
+     * @param mixed  $default Default value to return if paramater doesn't exist
      *
      * @return mixed
      */
-    public function getParameterByName($name, $default = null)
+    public function getParameterByName(string $name, mixed $default = null)
     {
         if (empty($this->parms) || empty($name)) return $default;
 
@@ -221,7 +221,7 @@ class CoreRequest
      * @param int $idx
      * @param mixed $default
      */
-    public function getParameterByIndex(int $idx, $default = null)
+    public function getParameterByIndex(int $idx, mixed $default = null)
     {
         return ($idx >= 0 && $idx < count($this->parms)) ? $this->parms[$idx] : $default;
     }
@@ -231,7 +231,7 @@ class CoreRequest
      *
      * @return string|null
      */
-    public function getParameterString() : ?string
+    public function getParameterString() : string|null
     {
         if (count($this->parms))
         {

@@ -164,7 +164,7 @@ abstract class CoreController implements AppCollectionInterface
      * Called when the method inside the controller doesn't exist to route to another method
      * and pass the missing piece as a parm.
      *
-     * This method should return an array with two elements [0=>the method name, 1 => the parm name]
+     * This method should return an array with two elements [0=> the method name, 1=> the parm name]
      *
      * @param string $name
      *
@@ -190,17 +190,14 @@ abstract class CoreController implements AppCollectionInterface
     /**
      * This method is called after $this->before() returns true and before the action.
      * Override to perform initialization specific to the controller such as assigning
-     * items to $this->view. Always call the base method.
+     * items to $this->view.
      */
     protected function initialize()
     {
-        // $this->view->setActiveMenu(0, $this->request->controller);
-        // $this->view->setActiveMenu(1, $this->request->action);
     }
 
     /**
      * This method is called after the action. Override to perform cleanup or last tasks.
-     *
      */
     protected function after()
     {
@@ -261,12 +258,8 @@ abstract class CoreController implements AppCollectionInterface
      */
     protected function terminate($code, $msg)
     {
-        $header = sprintf('%s %s %s', $_SERVER['SERVER_PROTOCOL'], $code, $msg);
-        @header($header, true, $code);
-        die($msg);
+        Utility::terminate($code, $msg);
     }
-
-
 
     /**
      * Sets the content type by emitting a Content-Type header
@@ -274,12 +267,9 @@ abstract class CoreController implements AppCollectionInterface
      * @param string $contentType The content type, i.e. 'application/json'
      * @param string $charSet The char set or omit for default of utf-8
      */
-    protected function setContentType($contentType, $charSet = self::DEFAULT_CHARSET)
+    protected function setContentType(string $contentType, string $charSet = self::DEFAULT_CHARSET)
     {
-        if ($contentType)
-        {
-            @header(sprintf('Content-Type: %s; charset=%s', $contentType, $charSet), true);
-        }
+        Utility::setContentType($contentType, $charSet);
     }
 
     /**
@@ -287,9 +277,9 @@ abstract class CoreController implements AppCollectionInterface
      *
      * @param string $charSet The char set or omit for default of utf-8
      */
-    protected function setJsonContentType($charSet = self::DEFAULT_CHARSET)
+    protected function setJsonContentType(string $charSet = self::DEFAULT_CHARSET)
     {
-        self::setContentType('application/json', $charSet);
+        Utility::setJsonContentType($charSet);
     }
 
     /**
@@ -309,7 +299,6 @@ abstract class CoreController implements AppCollectionInterface
      */
     protected function ajaxTerminateNotAuthenticated(string $commonFileName = 'ajax.session.expired.html')
     {
-        //$result = OpenObject::ResultRecord();
         $result = new \stdClass();
         $result->valid = 0;
         $result->data = [];
@@ -346,9 +335,7 @@ abstract class CoreController implements AppCollectionInterface
      */
     protected function disableCache()
     {
-        @header('Cache-Control: no-store, no-cache, must-revalidate');
-        @header('Cache-Control: post-check=0, pre-check=0', false);
-        @header('Pragma: no-cache');
+        Utility::disableCache();
     }
 
     /**
@@ -358,8 +345,7 @@ abstract class CoreController implements AppCollectionInterface
      */
     protected function enableCache(int $minutes)
     {
-        $seconds = max(abs($minutes) * 60, 60);
-        @header("cache-control: public, max-age=$seconds, s-maxage=$seconds, immutable");
+        Utility::enableCache($minutes);
     }
 
     /**
@@ -399,7 +385,7 @@ abstract class CoreController implements AppCollectionInterface
 
     private function getServer(): OpenObject
     {
-        $server = array();
+        $server = [];
         foreach($_SERVER as $key => $value)
         {
             $server[strtolower($key)] = $value;

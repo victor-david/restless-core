@@ -4,7 +4,7 @@ namespace Restless\Database;
 /**
  * Provides configuration values to access a database
  */
-final class ConnectionConfig
+class ConnectionConfig
 {
     /**
      * Name of the database

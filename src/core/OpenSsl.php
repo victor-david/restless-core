@@ -24,9 +24,10 @@ class OpenSsl
      * Encrypts the specified string.
      *
      * @param string $str
+     *
      * @return string|null
      */
-    public function encrypt(string $str) : ?string
+    public function encrypt(string $str) : string|null
     {
         $iv = random_bytes(openssl_cipher_iv_length($this->encryptMethod));
 
@@ -41,9 +42,10 @@ class OpenSsl
      * Decrypts the specified string.
      *
      * @param string $str
+     *
      * @return string|null
      */
-    public function decrypt(string $str) : ?string
+    public function decrypt(string $str) : string|null
     {
         $parts = explode(':', $str);
         $iv = hex2bin($parts[0]);

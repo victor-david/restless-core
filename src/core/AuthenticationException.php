@@ -3,7 +3,6 @@ namespace Restless\Core;
 
 /**
  * Represents an authentication exception, one that is thrown during login.
- *
  */
 class AuthenticationException extends \Exception
 {
@@ -14,7 +13,7 @@ class AuthenticationException extends \Exception
      */
     public $userId;
 
-    private function __construct(?string $message, int $userId, $previous)
+    private function __construct(string|null $message, int $userId, $previous)
     {
         $this->userId = $userId;
         parent::__construct($message ?? 'Invalid user id or password', 0, $previous);
@@ -23,7 +22,7 @@ class AuthenticationException extends \Exception
     /**
      * Throws an AuthenicationException
      */
-    public static function throwAuthenticationException(string $message = null, int $userId = 0, $previous = null)
+    public static function throwAuthenticationException(string|null $message = null, int $userId = 0, $previous = null)
     {
         throw new self($message, $userId, $previous);
     }
